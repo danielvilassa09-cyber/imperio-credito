@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Império Crédito — Simulação demonstrativa</title>
+<style>
+:root {
+  --site-primary: #153C35;
+  --site-on-primary: #FFFFFF;
+  --site-secondary: #D6F06B;
+  --site-on-secondary: #172D27;
+  --site-background: #F5F7F2;
+  --site-on-background: #172D27;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { min-height: 100vh; width: 100%; background-color: light-dark(var(--site-background), #111A17); color: light-dark(var(--site-on-background), #F1F5EF); }
+header { background: var(--site-primary); color: var(--site-on-primary); }
+.nav { max-width: 1120px; margin: auto; padding: calc(20px * var(--site-spacing-scale)) 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.brand { display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:-.04em; font-size:20px; }
+.brand-mark { display:grid; place-items:center; width:36px; height:36px; border-radius:12px; color:var(--site-on-secondary); background:var(--site-secondary); font-weight:900; }
+.nav small { opacity:.8; }
+.hero { background:var(--site-primary); color:var(--site-on-primary); padding:38px 24px 80px; position:relative; overflow:hidden; }
+.hero:after { content:""; position:absolute; width:340px; height:340px; border-radius:50%; border:1px solid rgba(255,255,255,.14); right:-100px; top:-110px; box-shadow:0 0 0 42px rgba(255,255,255,.035),0 0 0 84px rgba(255,255,255,.025); opacity:var(--site-decoration-opacity); pointer-events:none; }
+.hero-inner { max-width:1120px; margin:auto; display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:center; position:relative; z-index:1; }
+.eyebrow { display:inline-flex; border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:8px 12px; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+h1 { font-family:var(--site-font-heading); font-size:clamp(36px,5vw,58px); line-height:1.03; letter-spacing:-.055em; margin:22px 0 18px; max-width:610px; }
+.hero p { font-size:17px; line-height:1.65; color:rgba(255,255,255,.82); max-width:530px; margin:0; }
+.trust { display:flex; gap:18px; flex-wrap:wrap; margin-top:25px; font-size:13px; color:rgba(255,255,255,.9); }
+.trust span:before { content:"✓"; color:var(--site-secondary); font-weight:900; margin-right:7px; }
+.calc-card { background:light-dark(#FFFFFF,#1D2924); color:light-dark(#172D27,#F1F5EF); border-radius:calc(24px * var(--site-radius-scale)); padding:28px; box-shadow:0 18px 55px rgba(0,0,0,.15); }
+.calc-card h2 { margin:0 0 7px; font-size:23px; letter-spacing:-.03em; }
+.muted { color:light-dark(#64736D,#B7C5BE); font-size:13px; line-height:1.5; }
+label { display:block; font-size:13px; font-weight:700; margin:22px 0 10px; }
+.amount-row { display:flex; align-items:center; justify-content:space-between; gap:12px; font-weight:800; font-size:25px; }
+.amount-row small { font-size:13px; font-weight:600; color:light-dark(#64736D,#B7C5BE); }
+input[type=range] { width:100%; accent-color:var(--site-primary); margin:15px 0 0; }
+.select-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+select { width:100%; border:1px solid light-dark(#DCE4DE,#40534A); background:light-dark(#FFFFFF,#17221D); color:inherit; border-radius:12px; padding:13px 10px; font:inherit; }
+.result { margin-top:22px; padding:18px; border-radius:16px; background:light-dark(#F1F6E8,#26372D); }
+.result span { display:block; font-size:13px; color:light-dark(#56685F,#C2D1C6); }
+.result strong { display:block; font-size:34px; letter-spacing:-.05em; margin-top:4px; }
+.btn { border:0; border-radius:999px; width:100%; padding:15px 18px; margin-top:18px; background:var(--site-secondary); color:var(--site-on-secondary); font:inherit; font-weight:800; cursor:pointer; }
+.btn:focus-visible, select:focus-visible, input:focus-visible { outline:3px solid #87A8FF; outline-offset:3px; }
+.notice { font-size:11px; line-height:1.5; margin-top:12px; color:light-dark(#64736D,#B7C5BE); }
+main { max-width:1120px; margin:auto; padding:62px 24px; }
+.section-head { max-width:620px; margin:0 auto 28px; text-align:center; }
+.section-head h2 { font-size:clamp(26px,3vw,36px); letter-spacing:-.045em; margin:0 0 12px; }
+.section-head p { color:light-dark(#64736D,#B7C5BE); line-height:1.6; margin:0; }
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.step { padding:24px; border:1px solid light-dark(#DFE7E0,#34473D); border-radius:18px; background:light-dark(#FFFFFF,#1D2924); }
+.step-number { width:38px; height:38px; border-radius:12px; display:grid; place-items:center; background:var(--site-secondary); color:var(--site-on-secondary); font-weight:900; }
+.step h3 { margin:18px 0 8px; font-size:18px; }
+.step p { margin:0; font-size:14px; line-height:1.6; color:light-dark(#64736D,#B7C5BE); }
+.disclaimer { margin-top:34px; border-left:4px solid #D6F06B; padding:16px 18px; background:light-dark(#EDF2E8,#202C25); border-radius:0 12px 12px 0; font-size:13px; line-height:1.65; }
+footer { padding:25px 24px; background:light-dark(#E8EEE7,#101713); font-size:12px; color:light-dark(#64736D,#B7C5BE); }
+.footer-inner { max-width:1120px; margin:auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
+@media(max-width:760px) { .hero-inner { grid-template-columns:1fr; gap:28px; } .hero { padding-top:28px; } .calc-card { padding:22px; } .steps { grid-template-columns:1fr; } .nav { padding:16px 20px; } .nav small { display:none; } main { padding:45px 20px; } }
+</style>
+</head>
+<body>
+<div id="app">
+<header><div class="nav"><div class="brand"><div class="brand-mark">I</div><span>Império Crédito</span></div><small>Informação clara. Escolhas conscientes.</small></div></header>
+<section class="hero"><div class="hero-inner"><div><div class="eyebrow">Simulação demonstrativa</div><h1>Planeje seu próximo passo com mais clareza.</h1><p>Simule valores e parcelas estimadas para entender como um empréstimo pode caber no seu orçamento. Compare condições antes de contratar.</p><div class="trust"><span>Simulação gratuita</span><span>Sem compromisso</span><span>Transparência</span></div></div>
+<div class="calc-card"><h2>Simule seu empréstimo</h2><div class="muted">Ajuste o valor e o prazo para ver uma estimativa.</div><label for="amount">Quanto você gostaria de simular?</label><div class="amount-row"><span id="amountLabel">R$ 2.000</span><small>R$ 500 – R$ 30.000</small></div><input id="amount" type="range" min="500" max="30000" step="500" value="2000"><div class="select-row"><div><label for="months">Prazo</label><select id="months"><option value="6">6 meses</option><option value="12" selected>12 meses</option><option value="18">18 meses</option><option value="24">24 meses</option><option value="36">36 meses</option></select></div><div><label for="rate">Taxa ilustrativa</label><select id="rate"><option value="0.025">2,5% ao mês</option><option value="0.04" selected>4% ao mês</option><option value="0.06">6% ao mês</option></select></div></div><div class="result"><span>Parcela mensal estimada</span><strong id="payment">R$ 213,29</strong><span id="totalLabel">Total estimado: R$ 2.559,48</span></div><button class="btn" id="infoBtn">Entender os próximos passos</button><div class="notice" id="message">Protótipo ilustrativo: não envia pedido, não consulta crédito e não oferece aprovação.</div></div></div></section>
+<main><div class="section-head"><h2>Como funciona uma comparação de crédito?</h2><p>Uma plataforma de comparação pode ajudar você a conhecer alternativas, mas a aprovação e as condições dependem de cada instituição financeira.</p></div><div class="steps"><article class="step"><div class="step-number">1</div><h3>Simule com cuidado</h3><p>Escolha um valor e um prazo que façam sentido para o seu orçamento mensal.</p></article><article class="step"><div class="step-number">2</div><h3>Compare o custo total</h3><p>Confira juros, tarifas, parcela e Custo Efetivo Total (CET), não apenas o valor da prestação.</p></article><article class="step"><div class="step-number">3</div><h3>Verifique a instituição</h3><p>Antes de contratar, confira a identidade da financeira e leia o contrato. Nunca pague depósito antecipado para liberar crédito.</p></article></div><div class="disclaimer"><strong>Importante:</strong> este é apenas um protótipo visual da Império Crédito. Não é uma instituição financeira nem um correspondente bancário autorizado, não concede empréstimos e não recolhe dados pessoais. As taxas são exemplos para cálculo e não representam uma oferta real. Para operar com encaminhamento de propostas, será necessário formalizar parcerias e cumprir as regras legais, de proteção de dados e de segurança aplicáveis.</div></main>
+<footer><div class="footer-inner"><span>© 2026 Império Crédito — conceito demonstrativo.</span><span>Privacidade • Termos • Atendimento (links demonstrativos)</span></div></footer>
+</div>
+<script>
+const amount = document.getElementById('amount');
+const months = document.getElementById('months');
+const rate = document.getElementById('rate');
+const amountLabel = document.getElementById('amountLabel');
+const payment = document.getElementById('payment');
+const totalLabel = document.getElementById('totalLabel');
+const brl = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+function update(){
+ const principal = Number(amount.value);
+ const n = Number(months.value);
+ const r = Number(rate.value);
+ const installment = principal * r / (1 - Math.pow(1+r,-n));
+ amountLabel.textContent = brl.format(principal);
+ payment.textContent = brl.format(installment);
+ totalLabel.textContent = 'Total estimado: ' + brl.format(installment*n);
+}
+[amount,months,rate].forEach(el=>el.addEventListener('input',update));
+document.getElementById('infoBtn').addEventListener('click',()=>{
+ document.getElementById('message').textContent='Este protótipo não envia seus dados. Antes de publicar, será preciso definir uma parceria financeira legítima, política de privacidade e fluxo seguro de encaminhamento.';
+});
+update();
+</script>
+</body>
+</html>

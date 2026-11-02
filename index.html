@@ -69,7 +69,7 @@ footer{border-top:2px solid var(--gold);background:#020b18;padding:25px 0;color:
 <article class="pro-card" data-category="Aulas e cursos" data-search="aprenda mais aulas cursos reforco idioma"><span class="demo-label">PERFIL DEMONSTRATIVO</span><div class="pro-top"><div class="pro-avatar">AM</div><div><h3>Aprenda Mais</h3><small>Aulas e cursos · Exemplo</small></div></div><p>Exemplo de perfil para aulas particulares, reforço escolar e cursos livres.</p><span class="tag">Aulas</span><span class="tag">Cursos</span><br><a class="btn" href="#cadastro">Quero um perfil assim</a></article>
 <article class="pro-card" data-category="Serviços profissionais" data-search="solucoes profissionais consultoria planejamento negocio"><span class="demo-label">PERFIL DEMONSTRATIVO</span><div class="pro-top"><div class="pro-avatar">SP</div><div><h3>Soluções Profissionais</h3><small>Serviços profissionais · Exemplo</small></div></div><p>Exemplo de perfil para apresentação de consultoria e serviços especializados.</p><span class="tag">Consultoria</span><span class="tag">Negócios</span><br><a class="btn" href="#cadastro">Quero um perfil assim</a></article>
 </div></div></section>
-<section class="section" id="cadastro"><div class="wrap"><div class="join"><div class="eyebrow">Cadastro de interesse</div><h2 style="margin:9px 0">Cadastre seu negócio na Vilassa Conecta</h2><p style="color:#d4deea;line-height:1.6;font-size:14px">Preencha seus dados para solicitar um perfil. O cadastro será salvo para análise e não será publicado automaticamente. A equipe da Vilassa Conecta deverá aprovar o perfil antes de exibi-lo.</p><form class="join-form" id="joinForm"><input id="businessName" required maxlength="100" placeholder="Nome do profissional ou empresa"><input id="businessCity" required maxlength="100" placeholder="Cidade / Estado"><select id="businessCategory" required><option value="">Selecione a categoria</option><option>Casa e manutenção</option><option>Tecnologia</option><option>Design e artes</option><option>Veículos</option><option>Aulas e cursos</option><option>Serviços profissionais</option><option>Outros serviços</option></select><input id="businessContact" required maxlength="30" placeholder="Seu telefone/WhatsApp"><textarea id="businessDescription" maxlength="1000" placeholder="Descreva brevemente os serviços oferecidos"></textarea><button class="btn" id="joinSubmit" type="submit">Enviar cadastro para análise</button><p id="joinStatus" role="status" aria-live="polite" style="grid-column:1/-1;color:#ffe29a;font-size:13px"></p></form><p class="fine">Seus dados serão usados para analisar o cadastro e entrar em contato. Não informe senhas, documentos ou dados bancários. Consulte nosso <a href="privacidade.html">aviso de privacidade</a>. O banco de dados precisa ser configurado antes de receber cadastros.</p></div></div></section>
+<section class="section" id="cadastro"><div class="wrap"><div class="join"><div class="eyebrow">Cadastro de interesse</div><h2 style="margin:9px 0">Cadastre seu negócio na Vilassa Conecta</h2><p style="color:#d4deea;line-height:1.6;font-size:14px">Preencha os dados para solicitar um perfil. Ao tocar em enviar, o WhatsApp será aberto com sua mensagem pronta para encaminhar à Vilassa Conecta. O perfil não será publicado automaticamente: a equipe deverá analisar e aprovar o conteúdo.</p><form class="join-form" id="joinForm"><input id="businessName" required maxlength="100" placeholder="Nome do profissional ou empresa"><input id="businessCity" required maxlength="100" placeholder="Cidade / Estado"><select id="businessCategory" required><option value="">Selecione a categoria</option><option>Casa e manutenção</option><option>Tecnologia</option><option>Design e artes</option><option>Veículos</option><option>Aulas e cursos</option><option>Serviços profissionais</option><option>Outros serviços</option></select><input id="businessContact" required maxlength="30" placeholder="Seu telefone/WhatsApp"><textarea id="businessDescription" maxlength="1000" placeholder="Descreva brevemente os serviços oferecidos"></textarea><button class="btn" id="joinSubmit" type="submit">Enviar cadastro para análise</button><p id="joinStatus" role="status" aria-live="polite" style="grid-column:1/-1;color:#ffe29a;font-size:13px"></p></form><p class="fine">Os dados preenchidos serão incluídos na mensagem do WhatsApp que você decidir enviar. Não informe senhas, CPF ou dados bancários neste formulário. Consulte nosso <a href="privacidade.html">aviso de privacidade</a>. O banco de dados precisa ser configurado antes de receber cadastros.</p></div></div></section>
 
 <section class="section pricing" id="planos"><div class="wrap">
 <div class="section-title"><small>Planos para profissionais</small><h2>Divulgue seu negócio e ganhe visibilidade</h2><p>Dois formatos comerciais para começar. Os valores abaixo são uma proposta inicial de lançamento e devem ser confirmados por WhatsApp antes de qualquer contratação ou pagamento.</p></div>
@@ -95,21 +95,22 @@ footer{border-top:2px solid var(--gold);background:#020b18;padding:25px 0;color:
 document.getElementById('searchPro').addEventListener('input',filterDirectory);
 document.getElementById('filterPro').addEventListener('change',filterDirectory);
 function filterDirectory(){const q=document.getElementById('searchPro').value.toLowerCase();const c=document.getElementById('filterPro').value;let n=0;document.querySelectorAll('.pro-card').forEach(card=>{const ok=(!c||card.dataset.category===c)&&(!q||card.dataset.search.includes(q)||card.innerText.toLowerCase().includes(q));card.style.display=ok?'block':'none';if(ok)n++;});let empty=document.getElementById('noResults');if(!n&&!empty){empty=document.createElement('div');empty.id='noResults';empty.className='empty';empty.textContent='Nenhum perfil demonstrativo encontrado. Tente outra busca.';document.getElementById('directoryGrid').appendChild(empty);}if(n&&empty)empty.remove();}
-// Configure o projeto Supabase depois de criá-lo. A chave anon/public pode ficar no navegador somente com RLS ativo. NUNCA use a chave service_role aqui.
-const SUPABASE_URL='COLE_AQUI_A_URL_DO_PROJETO';
-const SUPABASE_ANON_KEY='COLE_AQUI_A_CHAVE_ANON_PUBLIC';
-let supabaseClient=null;
-if(SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.startsWith('eyJ')){
-  const sdk=document.createElement('script');sdk.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';sdk.onload=()=>{supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);};document.head.appendChild(sdk);
-}
-document.getElementById('joinForm').addEventListener('submit',async function(e){
- e.preventDefault();const v=id=>document.getElementById(id).value.trim();const status=document.getElementById('joinStatus');const btn=document.getElementById('joinSubmit');
- if(!supabaseClient){status.textContent='Cadastro online ainda não configurado. Aguarde a configuração do banco de dados.';return;}
- const data={name:v('businessName'),city:v('businessCity'),category:v('businessCategory'),phone:v('businessContact'),description:v('businessDescription'),status:'pending'};
- btn.disabled=true;btn.textContent='Enviando...';status.textContent='';
- try{const {error}=await supabaseClient.from('professionals').insert([data]);if(error)throw error;status.textContent='Cadastro recebido! Ele ficará pendente de análise. A publicação só ocorrerá após aprovação.';this.reset();}
- catch(err){status.textContent='Não foi possível enviar agora. Confira os dados ou tente novamente mais tarde.';console.error('Erro no cadastro:',err);}
- finally{btn.disabled=false;btn.textContent='Enviar cadastro para análise';}
+document.getElementById('joinForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ const v=id=>document.getElementById(id).value.trim();
+ const message=[
+  'Olá! Quero solicitar um cadastro na Vilassa Conecta.',
+  '',
+  'Nome: '+v('businessName'),
+  'Cidade/Estado: '+v('businessCity'),
+  'Categoria: '+v('businessCategory'),
+  'Telefone/WhatsApp: '+v('businessContact'),
+  'Descrição: '+(v('businessDescription')||'Não informada'),
+  '',
+  'Gostaria de receber informações sobre análise do perfil e planos.'
+ ].join('\n');
+ document.getElementById('joinStatus').textContent='Abrindo o WhatsApp com seus dados. Revise a mensagem e toque em enviar por lá.';
+ window.location.href='https://wa.me/5577981037739?text='+encodeURIComponent(message);
 });
 </script>
 </body></html>

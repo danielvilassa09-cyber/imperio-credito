@@ -42,7 +42,43 @@ const phone='5577981037739';
 
 const artNames=["Ametista Lunar","Dragão de Brasa","Flor do Éter","Planeta Safira","Castelo do Crepúsculo","Poção Estelar","Gato Astral","Robô Guardião","Vale Dourado","Coroa do Sol","Geodo Violeta","Fênix Pixel","Jardim Esmeralda","Lua de Netuno","Torre Encantada","Elixir Azul","Raposa Cósmica","Androide Neon","Pico Celeste","Diadema Real","Prisma Roxo","Serpente Flamejante","Rosa de Cristal","Anel de Saturno","Fortaleza Rubra","Frasco Místico","Coruja Noturna","Sentinela 8-Bit","Lago das Nuvens","Tiara Imperial","Safira Antiga","Basilisco de Fogo","Cacto Florido","Cometa Azul","Portão Arcano","Essência Verde","Coelho Lunar","Mecha Aurora","Montanha Rosa","Cetro Solar","Quartzo Mágico","Lobo Vulcânico","Lírio Pixel","Estação Orbital","Casa das Fadas","Néctar Encantado","Urso Pixel","Drone Protetor","Deserto Neon","Broche Dourado","Pedra do Oráculo","Wyvern Rubi","Cogumelo Luminoso","Galáxia Mini","Trono de Cristal","Ampola Arcana","Panda Celeste","Robô Explorador","Ilha Suspensa","Coroa Boreal","Diamante Glacial","Golem de Lava","Árvore Antiga","Asteroide Rosa","Torre da Lua","Poção Rubra","Corvo Místico","Ciborgue Azul","Cachoeira Pixel","Anel da Realeza","Opala Mística","Grifo Dourado","Girassol Cósmico","Planeta Coral","Ponte Encantada","Frasco de Mana","Cervo Estelar","Bot Mecânico","Floresta Roxa","Coroa de Jade","Rubi Secreto","Monstro de Gelo","Bonsai Pixel","Nave Violeta","Biblioteca Arcana","Elixir Solar","Gato Samurai","Robô de Batalha","Aurora Boreal","Coroa Prismática","Esmeralda Viva","Dragão das Sombras","Orquídea Neon","Satélite Lunar","Palácio das Estrelas","Poção do Tempo","Raposa de Fogo","Autômato Dourado","Montanha Mágica","Relíquia do Infinito"];
 const artColors=[['#17152f','#a78bfa','#e9d5ff'],['#21152a','#f97316','#fde68a'],['#142b27','#34d399','#bbf7d0'],['#101e38','#38bdf8','#c4b5fd'],['#2a1d35','#fbbf24','#fda4af'],['#17283a','#22d3ee','#a7f3d0'],['#30213a','#fb7185','#fef3c7'],['#172b35','#67e8f9','#e2e8f0'],['#183044','#60a5fa','#fde68a'],['#30251a','#f59e0b','#fef08a']];
-function pixelImage(i){const [bg,a,b]=artColors[i%10];let cells='';for(let y=0;y<16;y++){for(let x=0;x<16;x++){const v=(x*17+y*31+(i+1)*13+x*y*7)%23;const dx=x-7.5,dy=y-7.5;const on=((x+y+i)%7===0)||((x*3+y*5+i)%11<3)||((dx*dx+dy*dy)<(25+(i%5)*8)&&v%4!==0);if(on)cells+='<rect x="'+(x*10)+'" y="'+(y*10)+'" width="10" height="10" fill="'+(v%4?a:b)+'"/>';}}return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" shape-rendering="crispEdges"><rect width="160" height="160" fill="'+bg+'"/><path d="M0 0L160 160M160 0L0 160" stroke="'+a+'" opacity=".12" stroke-width="3"/>'+cells+'<rect x="5" y="5" width="150" height="150" fill="none" stroke="'+b+'" stroke-width="2"/></svg>';}
+function pixelImage(i){
+ const palettes=[['#111b3b','#8b5cf6','#f5d0fe'],['#25162d','#f97316','#fde68a'],['#102d2a','#10b981','#d9f99d'],['#10233f','#38bdf8','#e0f2fe'],['#30203b','#ec4899','#fbcfe8'],['#25251b','#eab308','#fef08a'],['#182b3a','#14b8a6','#ccfbf1'],['#351b27','#ef4444','#fecaca'],['#1c2340','#818cf8','#fef3c7'],['#282039','#d946ef','#f5d0fe']];
+ const [bg,main,light]=palettes[i%palettes.length],kind=i%20,ox=12,oy=11;
+ let pixels='';
+ const inside=(x,y)=>{
+  const ellipse=(cx,cy,rx,ry)=>((x-cx)*(x-cx))/(rx*rx)+((y-cy)*(y-cy))/(ry*ry)<=1;
+  switch(kind){
+   case 0: return (y>=13&&y<=16&&x>=5&&x<=18)||(y>=7&&y<=12&&((x>=5&&x<=7)||(x>=10&&x<=13)||(x>=16&&x<=18)))||(y>=10&&y<=12&&x>=7&&x<=16);
+   case 1: return ellipse(12,14,7,3)||ellipse(12,10,4,5)||(y>=3&&y<=10&&x>=3&&x<=8&&x+y<14)||(y>=3&&y<=10&&x>=16&&x<=21&&y-x< -7)||(x>=2&&x<=5&&y>=12&&y<=16);
+   case 2: return ellipse(12,7,3,4)||ellipse(7,10,4,3)||ellipse(17,10,4,3)||ellipse(9,15,3,4)||ellipse(15,15,3,4)||(x>=11&&x<=12&&y>=14&&y<=21)||(y>=20&&y<=21&&x>=8&&x<=15);
+   case 3: return ellipse(11,11,7,7)||((y>=8&&y<=12)&&Math.abs(x-(12+(y-10)*2))<=1);
+   case 4: return (x>=3&&x<=7&&y>=8&&y<=20)||(x>=9&&x<=14&&y>=5&&y<=20)||(x>=16&&x<=20&&y>=8&&y<=20)||(y>=8&&y<=20&&x>=3&&x<=20)||(y>=5&&y<=7&&x>=9&&x<=14&&x%2===0);
+   case 5: return (x>=9&&x<=14&&y>=4&&y<=7)||(x>=7&&x<=16&&y>=8&&y<=18)||(y>=18&&y<=20&&x>=8&&x<=15)||(x>=10&&x<=13&&y>=2&&y<=4);
+   case 6: return (y>=7&&y<=15&&x>=5&&x<=18)||(y>=3&&y<=8&&((x>=5&&x<=8&&y<=7-x/4)||(x>=15&&x<=18&&y<=7-(20-x)/4)))||(y>=16&&y<=21&&x>=8&&x<=15)||(x>=17&&x<=21&&y>=13&&y<=15&&x-y>=4);
+   case 7: return (x>=7&&x<=16&&y>=4&&y<=11)||(x>=9&&x<=14&&y>=12&&y<=18)||(x>=4&&x<=7&&y>=12&&y<=15)||(x>=16&&x<=19&&y>=12&&y<=15)||(x>=9&&x<=10&&y>=19&&y<=22)||(x>=14&&x<=15&&y>=19&&y<=22);
+   case 8: return (y>=7&&y<=20&&x>=2&&x<=8&&y>=Math.abs(x-5)*2+5)||(y>=3&&y<=20&&x>=9&&x<=15&&y>=Math.abs(x-12)*2+2)||(y>=9&&y<=20&&x>=16&&x<=22&&y>=Math.abs(x-19)*2+7);
+   case 9: return (x>=11&&x<=13&&y>=3&&y<=18)||(y>=8&&y<=10&&x>=7&&x<=17)||(y>=17&&y<=20&&x>=8&&x<=16)||(x>=9&&x<=15&&y>=19&&y<=21);
+   case 10: return ellipse(12,12,6,7)||(y>=3&&y<=8&&((x>=5&&x<=8&&y<=x-2)||(x>=16&&x<=19&&y<=21-x)))||(x>=4&&x<=8&&y>=14&&y<=17);
+   case 11: return ellipse(12,10,7,6)||ellipse(12,17,6,5)||(x>=5&&x<=8&&y>=4&&y<=8)||(x>=16&&x<=19&&y>=4&&y<=8);
+   case 12: return ellipse(12,12,7,8)||(y>=2&&y<=5&&x>=9&&x<=14)||(x>=4&&x<=7&&y>=10&&y<=15)||(x>=17&&x<=20&&y>=10&&y<=15)||(y>=19&&y<=21&&x>=8&&x<=16);
+   case 13: return (y>=8&&y<=20&&x>=10&&x<=13)||(y>=5&&y<=11&&x>=7&&x<=16)||(y>=10&&y<=14&&x>=4&&x<=19)||(y>=4&&y<=8&&((x>=5&&x<=8)||(x>=16&&x<=19)));
+   case 14: return (y>=10&&y<=17&&x>=5&&x<=18)||(y>=5&&y<=10&&x>=7&&x<=16)||(y>=2&&y<=6&&x>=9&&x<=14)||(x>=2&&x<=5&&y>=17&&y<=20)||(x>=18&&x<=21&&y>=17&&y<=20);
+   case 15: return (y>=5&&y<=9&&x>=8&&x<=15)||(y>=9&&y<=15&&x>=5&&x<=18)||(y>=15&&y<=18&&x>=8&&x<=15)||(y>=10&&y<=12&&((x>=2&&x<=5)||(x>=18&&x<=21)));
+   case 16: return (y>=10&&y<=17&&x>=4&&x<=19)||(y>=7&&y<=11&&x>=8&&x<=16)||(y>=5&&y<=8&&x>=10&&x<=14)||(x>=1&&x<=4&&y>=8&&y<=11);
+   case 17: return (y>=5&&y<=12&&x>=5&&x<=18&&Math.abs(x-12)<=y-3)||(y>=10&&y<=18&&x>=8&&x<=15)||(y>=15&&y<=20&&x>=6&&x<=17);
+   case 18: return (y>=7&&y<=16&&x>=6&&x<=17)||(y>=3&&y<=8&&((x>=5&&x<=9&&y<=x-1)||(x>=15&&x<=19&&y<=19-x+4)))||(y>=14&&y<=18&&x>=3&&x<=20);
+   default: return ellipse(12,10,6,6)||ellipse(12,17,7,4)||(y>=2&&y<=7&&x>=9&&x<=14);
+  }
+ };
+ for(let y=0;y<24;y++)for(let x=0;x<24;x++)if(inside(x,y)){
+  const edge=!inside(Math.max(0,x-1),y)||!inside(Math.min(23,x+1),y)||!inside(x,Math.max(0,y-1))||!inside(x,Math.min(23,y+1));
+  pixels+='<rect x="'+(x*8)+'" y="'+(y*8)+'" width="8" height="8" fill="'+(edge?light:main)+'"/>';
+ }
+ let stars='';for(let s=0;s<18;s++){const x=(s*37+i*11)%192,y=(s*53+i*7)%192;if(!inside(Math.floor(x/8),Math.floor(y/8)))stars+='<rect x="'+x+'" y="'+y+'" width="4" height="4" fill="'+light+'" opacity=".75"/>';}
+ const eyes='<rect x="76" y="88" width="8" height="8" fill="'+bg+'"/><rect x="108" y="88" width="8" height="8" fill="'+bg+'"/>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" shape-rendering="crispEdges"><rect width="192" height="192" fill="'+bg+'"/><path d="M0 160H192M0 168H192" stroke="'+main+'" opacity=".25" stroke-width="4"/>'+stars+pixels+(kind===6||kind===10||kind===11||kind===15||kind===18?eyes:'')+'<rect x="4" y="4" width="184" height="184" fill="none" stroke="'+light+'" opacity=".45" stroke-width="2"/></svg>';
+}
 const catalog=document.getElementById('products');
 catalog.innerHTML=artNames.map((name,i)=>{const code='VP'+String(i+1).padStart(3,'0');const price=['R$ 7,90','R$ 8,90','R$ 9,90','R$ 12,90'][i%4];const svg=encodeURIComponent(pixelImage(i));return '<article class="product" data-category="Pixel Art" data-search="'+(name+' pixel art arte digital coleção').toLowerCase()+'"><img loading="lazy" src="data:image/svg+xml;charset=utf-8,'+svg+'" alt="'+name+' em pixel art"><div class="product-body"><div class="product-meta"><span class="tag">Pixel Art · '+code+'</span><span class="price">'+price+'</span></div><h3>'+name+'</h3><p>Arte pixel original da coleção Vilassa, com composição e paleta próprias.</p><a class="btn buy" data-code="'+code+'" data-name="'+name+'" data-price="'+price+'" href="#">Consultar e comprar</a></div></article>';}).join('');
 
